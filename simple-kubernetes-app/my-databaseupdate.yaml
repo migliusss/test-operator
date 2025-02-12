@@ -1,0 +1,7 @@
+apiVersion: kopf.dev/v1
+kind: DatabaseUpdate
+metadata:
+  name: my-new-databaseupdate-object
+spec:
+  # This is the desired state of the DB, which DB version to update the cluster to.
+  version: "3.0.0"

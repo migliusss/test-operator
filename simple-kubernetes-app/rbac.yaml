@@ -1,0 +1,53 @@
+# Role-Based Access Control
+# The pod where the operator runs must have the permissions to access
+# and to manipulate the objects, both domain-specific and the built-in ones.
+
+# RBAC could be used and attached to the operator’s pod via a service account.
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kopf-operator-account
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kopf-operator-role
+rules:
+  # Access to core resources.
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Access to Custom Resource: databaseupdates.
+  - apiGroups: ["kopf.dev"]
+    resources: ["databaseupdates"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Access to deployments for triggering rolling updates.
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+
+  # Access to jobs if the operator creates or monitors migration jobs.
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Optionally, access to configmaps/secrets if needed.
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kopf-operator-rolebinding
+# "roleRef" specifies the binding to a Role / ClusterRole
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role # This must be Role or ClusterRole.
+  name: kopf-operator-role # This must match the name of the Role or ClusterRole you wish to bind to.
+subjects:
+  - kind: ServiceAccount
+    name: kopf-operator-account

@@ -1,0 +1,22 @@
+# The best way to deploy the operator to the cluster is via the Deployment object
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kopf-operator
+spec:
+  # Keep 1 replica.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      application: kopf-operator
+  template:
+    metadata:
+      labels:
+        application: kopf-operator
+    spec:
+      serviceAccountName: kopf-operator-account
+      containers:
+        - name: kopf-operator
+          image: migliuss/kopf-operator
