@@ -8,5 +8,4 @@ RUN pip install kopf kubernetes
 WORKDIR /src
 # Copy the operator code into the container.
 COPY .. /src
-# Use the JSON (exec) form of CMD to ensure proper handling of OS signals.
 CMD ["kopf", "run", "databaseUpdate.py", "--verbose"]

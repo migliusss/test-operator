@@ -32,6 +32,6 @@ async def handle_database_update(spec, status, namespace, logger, **kwargs):
 
     logger.info("Database update complete. Setting currentVersion to %s", desired_version)
     return {'currentVersion': desired_version}
-¢
+
 if __name__ == "__main__":
     kopf.run()
