@@ -4,4 +4,4 @@ metadata:
   name: my-new-databaseupdate-object
 spec:
   # This is the desired state of the DB, which DB version to update the cluster to.
-  version: "3.0.0"
+  version: "12.0.0"

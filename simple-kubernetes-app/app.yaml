@@ -19,6 +19,9 @@ spec:
           image: simple-kubernetes-app:latest
           ports:
             - containerPort: 3000
+          env:
+            - name: APP_VERSION
+              value: "11.0.0"
           imagePullPolicy: IfNotPresent
 ---
 apiVersion: v1
