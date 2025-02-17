@@ -26,6 +26,7 @@ async def handle_database_update(spec, status, name, namespace, logger, **kwargs
     # 2. Trigger a Job by creating a manifest for a Job.
     # 3. Create the Job.
     # 4. Monitor the job by polling for the Job until it completes or fails.
+    # 5. Update App Deployment Environment Variable, and trigger Rolling Update.
 
     # Step 1: Check current DB version with the desired DB version.
     if desired_version == current_version:
@@ -104,6 +105,7 @@ async def handle_database_update(spec, status, name, namespace, logger, **kwargs
 
     logger.info("Database update complete. Setting currentVersion to %s", desired_version)
 
+    # Step 5: Update App Deployment Environment Variable, and trigger Rolling Update.
     deployment_name = "app-deployment"
     update_deployment_env(namespace, deployment_name, desired_version, logger)
 
